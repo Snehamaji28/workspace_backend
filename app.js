@@ -24,6 +24,9 @@ const exampleEmployee = {
   email: "johnheljlkjd@example.com"
 };
 
+app.get("/", (req, res)=>{
+  res.send("error");
+});
 // Use the employeeRouter for the /api/emp endpoint
 app.use('/api/emp', employeeRouter);
 // app.use("/api/attendance", attendanceRoutes); // Attendance routes
