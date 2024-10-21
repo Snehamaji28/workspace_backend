@@ -6,8 +6,24 @@ const cookieParser = require('cookie-parser');
 const employeeRouter = require("./routes/Employee");
 const Attendance = require('./models/attendance.model');
 const Employee = require('./models/employee.model');
+const cors = require("cors");
 
-// const attendanceRoutes = require("./routes/attendance.routes");
+const allowedOrigins = [
+  'http://localhost:5173', // Adjust the port if necessary
+  'https://workspace-frontend-seven.vercel.app'
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Proceed with the request
+    } else {
+      callback(new Error('Not allowed by CORS')); // Reject the request
+    }
+  },
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
 
 app.use(express.json()); 
 
@@ -17,13 +33,6 @@ app.use(cookieParser());
 
 const PORT = process.env.PORT || 3000;
 
-const exampleEmployee = {
-  id: "EMP12345",
-  name: "Sree Gopal Saha",
-  joiningDate: "2022-01-15",
-  email: "johnheljlkjd@example.com"
-};
-
 app.get("/", (req, res)=>{
   res.send("error");
 });
@@ -32,5 +41,5 @@ app.use('/api/emp', employeeRouter);
 // app.use("/api/attendance", attendanceRoutes); // Attendance routes
 
 app.listen(PORT, () => {
-  console.log(`App is running on http://localhost:${PORT}`);
+  console.log(`App is running!`);
 });

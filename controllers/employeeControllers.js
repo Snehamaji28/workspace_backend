@@ -14,6 +14,21 @@ const attenEmployee = async (req, res) => {
             return res.status(404).json({ message: "Employee not found." });
         }
 
+        const now = new Date(); // Current date and time
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Today's date at 00:00:00
+        
+        // Check if lastAttendance exists
+        if (employee.lastAttendance) {
+            // Convert lastAttendance to a Date object
+            const lastAttendanceDate = new Date(employee.lastAttendance);
+            
+            // Check if the last attendance was today
+            if (lastAttendanceDate >= today) {
+                return res.status(404).json({ message: "Already attended today." });
+            }
+        }
+        
+        
         // Create a new attendance record
         const newAttendance = new Attendance({
             employeeId: employee._id,
@@ -24,10 +39,10 @@ const attenEmployee = async (req, res) => {
 
         // Push the new attendance record to the employee's attendanceRecords array
         employee.attendanceRecords.push(newAttendance._id);
-        employee.lastAttendance = Date.now(); // Update last attendance timestamp
+        employee.lastAttendance = now; // Update last attendance timestamp
         await employee.save();
+        // console.log("atten executed!");
         
-        console.log("atten executed!");
         res.status(201).json({ message: "Attendance marked successfully." });
     } catch (error) {
         // console.error("Error creating attendance record:", error.message);
@@ -83,7 +98,7 @@ const loginEmployee = async (req, res) => {
             maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days in milliseconds
         });
 
-        res.status(200).json({ message: "Login successful." });
+        res.status(200).json({ message: "Login successful.", token});
 
     } catch (error) {
         console.error(error);
