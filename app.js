@@ -10,7 +10,10 @@ const cors = require("cors");
 
 const allowedOrigins = [
   'http://localhost:5173', // Adjust the port if necessary
-  'https://workspace-frontend-seven.vercel.app'
+  'https://workspace-frontend-seven.vercel.app',
+  'https://workspace.rezime.in',
+  'https://rezime.in'
+
 ];
 
 app.use(cors({
